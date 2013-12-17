@@ -15,5 +15,10 @@ namespace Parallel_Git_Repo_Sync
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            Text = Application.ProductName + " - v" + Application.ProductVersion.Substring(0, 3);
+        }
     }
 }
