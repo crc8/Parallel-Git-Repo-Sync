@@ -20,5 +20,20 @@ namespace Parallel_Git_Repo_Sync
         {
             Text = Application.ProductName + " - v" + Application.ProductVersion.Substring(0, 3);
         }
+
+        private void SyncButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Perform sync");
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog();
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
