@@ -64,9 +64,8 @@ namespace Parallel_Git_Repo_Sync
 
         private void SyncBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string GitRepository = GitRepositories[(int)e.Argument];
-            string Output;
             int i;
+            string GitRepository = GitRepositories[(int)e.Argument];
             SyncActionType TargetSyncActionType;
             string TargetSyncAction;
             Process SyncProcess;
@@ -78,8 +77,6 @@ namespace Parallel_Git_Repo_Sync
                 SyncProcess.StartInfo.FileName = GitBinary;
                 SyncProcess.StartInfo.CreateNoWindow = true;
                 SyncProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                SyncProcess.StartInfo.RedirectStandardOutput = true;
-                SyncProcess.StartInfo.RedirectStandardError = true;
                 SyncProcess.StartInfo.UseShellExecute = false;
                 switch (i)
                 {
@@ -101,14 +98,8 @@ namespace Parallel_Git_Repo_Sync
                 GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Pending);
                 SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository + ".\\.git\" " + " --work-tree=\"" + GitRepository + "\" " + TargetSyncAction;
                 SyncProcess.Start();
-                Output = "";
-                while (!SyncProcess.StandardOutput.EndOfStream)
-                {
-                    Output += SyncProcess.StandardOutput.ReadLine();
-                }
-                Debug.WriteLine(GitRepository + ": " + Output);
-                SyncProcess.WaitForExit();
-                if (SyncProcess.ExitCode == 0)
+                SyncProcess.WaitForExit(15 * 1000);
+                if (SyncProcess.HasExited && SyncProcess.ExitCode == 0)
                 {
                     GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Success);
                 }
