@@ -31,6 +31,14 @@ namespace Parallel_Git_Repo_Sync
             RefreshDisplay();
         }
 
+        private void RepositoriesDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SyncBackgroundWorker = new BackgroundWorker[1];
+            SyncBackgroundWorker[0] = new BackgroundWorker();
+            SyncBackgroundWorker[0].DoWork += new DoWorkEventHandler(SyncBackgroundWorker_DoWork);
+            SyncBackgroundWorker[0].RunWorkerAsync(e.RowIndex);
+        }
+
         private void SyncButton_Click(object sender, EventArgs e)
         {
             RefreshDisplay();

@@ -79,6 +79,7 @@
             this.RepositoriesDataGridView.Name = "RepositoriesDataGridView";
             this.RepositoriesDataGridView.Size = new System.Drawing.Size(460, 309);
             this.RepositoriesDataGridView.TabIndex = 0;
+            this.RepositoriesDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.RepositoriesDataGridView_CellDoubleClick);
             // 
             // MainForm
             // 
