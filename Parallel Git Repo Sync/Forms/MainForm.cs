@@ -69,18 +69,18 @@ namespace Parallel_Git_Repo_Sync
             int i;
             SyncActionType TargetSyncActionType;
             string TargetSyncAction;
-
-            Process SyncProcess = new Process();
-            SyncProcess.EnableRaisingEvents = false;
-            SyncProcess.StartInfo.FileName = GitBinary;
-            SyncProcess.StartInfo.CreateNoWindow = true;
-            SyncProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            SyncProcess.StartInfo.RedirectStandardOutput = true;
-            SyncProcess.StartInfo.RedirectStandardError = true;
-            SyncProcess.StartInfo.UseShellExecute = false;
+            Process SyncProcess;
 
             for (i = 0; i < 3; i++)
             {
+                SyncProcess = new Process();
+                SyncProcess.EnableRaisingEvents = false;
+                SyncProcess.StartInfo.FileName = GitBinary;
+                SyncProcess.StartInfo.CreateNoWindow = true;
+                SyncProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                SyncProcess.StartInfo.RedirectStandardOutput = true;
+                SyncProcess.StartInfo.RedirectStandardError = true;
+                SyncProcess.StartInfo.UseShellExecute = false;
                 switch (i)
                 {
                     case 0:
@@ -106,6 +106,7 @@ namespace Parallel_Git_Repo_Sync
                 {
                     Output += SyncProcess.StandardOutput.ReadLine();
                 }
+                Debug.WriteLine(GitRepository + ": " + Output);
                 SyncProcess.WaitForExit();
                 if (SyncProcess.ExitCode == 0)
                 {
@@ -115,6 +116,7 @@ namespace Parallel_Git_Repo_Sync
                 {
                     GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Failed);
                 }
+                SyncProcess.Close();
             }
         }
     }
