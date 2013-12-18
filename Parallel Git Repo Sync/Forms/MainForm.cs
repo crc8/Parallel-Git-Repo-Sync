@@ -33,6 +33,7 @@ namespace Parallel_Git_Repo_Sync
 
         private void SyncButton_Click(object sender, EventArgs e)
         {
+            RefreshDisplay();
             SyncBackgroundWorker = new BackgroundWorker[GitRepositories.Length];
             for (int i = 0; i < GitRepositories.Length; i++)
             {
