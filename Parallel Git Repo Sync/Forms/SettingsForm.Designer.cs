@@ -70,6 +70,7 @@
             this.GitRepositoriesTextBox.Location = new System.Drawing.Point(112, 38);
             this.GitRepositoriesTextBox.Multiline = true;
             this.GitRepositoriesTextBox.Name = "GitRepositoriesTextBox";
+            this.GitRepositoriesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.GitRepositoriesTextBox.Size = new System.Drawing.Size(270, 160);
             this.GitRepositoriesTextBox.TabIndex = 4;
             // 
