@@ -56,9 +56,26 @@ namespace Parallel_Git_Repo_Sync
 
         private void RefreshDisplay()
         {
+            string Temp;
+
             GitBinary = Reg.Read("Git Binary");
-            GitRepositories = Reg.Read("Git Repositories").Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            MaximumThread = Int32.Parse(Reg.Read("Maximum Thread"));
+            
+            Temp = Reg.Read("Git Repositories");
+            if(!String.IsNullOrEmpty(Temp))
+            {
+                GitRepositories = Temp.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                GitRepositories = new string[0];
+            }
+
+            Temp = Reg.Read("Maximum Thread");
+            if (!String.IsNullOrEmpty(Temp))
+            {
+                MaximumThread = Int32.Parse(Temp);
+            }
+
             GitRepositoriesDataGridView.ShowRepositories(GitRepositories);
         }
 
