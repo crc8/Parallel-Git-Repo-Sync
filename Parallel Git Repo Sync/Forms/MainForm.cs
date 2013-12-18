@@ -113,7 +113,7 @@ namespace Parallel_Git_Repo_Sync
                         return;
                 }
                 GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Pending);
-                SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository + ".\\.git\" " + " --work-tree=\"" + GitRepository + "\" " + TargetSyncAction;
+                SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository.Trim() + ".\\.git\" " + " --work-tree=\"" + GitRepository.Trim() + "\" " + TargetSyncAction;
                 SyncProcess.Start();
                 SyncProcess.WaitForExit(15 * 1000);
                 if (SyncProcess.HasExited && SyncProcess.ExitCode == 0)
