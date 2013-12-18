@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CloseButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.GitRepositoriesTextBox = new System.Windows.Forms.TextBox();
             this.BrowseButton = new System.Windows.Forms.Button();
@@ -40,16 +40,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.MaximumThreadNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
-            // CancelButton
+            // CloseButton
             // 
-            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CancelButton.Location = new System.Drawing.Point(307, 233);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 8;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CloseButton.Location = new System.Drawing.Point(307, 233);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(75, 23);
+            this.CloseButton.TabIndex = 8;
+            this.CloseButton.Text = "Close";
+            this.CloseButton.UseVisualStyleBackColor = true;
+            this.CloseButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // SaveButton
             // 
@@ -142,7 +142,7 @@
             this.Controls.Add(this.GitBinaryTextBox);
             this.Controls.Add(this.GitBinaryLabel);
             this.Controls.Add(this.GitRepositoriesTextBox);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.SaveButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -150,6 +150,7 @@
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.MaximumThreadNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,7 +159,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.TextBox GitRepositoriesTextBox;
         private System.Windows.Forms.Button BrowseButton;

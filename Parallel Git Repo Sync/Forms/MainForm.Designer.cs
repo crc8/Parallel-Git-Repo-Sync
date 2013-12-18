@@ -39,7 +39,7 @@
             // SyncButton
             // 
             this.SyncButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SyncButton.Location = new System.Drawing.Point(12, 331);
+            this.SyncButton.Location = new System.Drawing.Point(12, 327);
             this.SyncButton.Name = "SyncButton";
             this.SyncButton.Size = new System.Drawing.Size(75, 23);
             this.SyncButton.TabIndex = 1;
@@ -50,7 +50,7 @@
             // SettingsButton
             // 
             this.SettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SettingsButton.Location = new System.Drawing.Point(93, 331);
+            this.SettingsButton.Location = new System.Drawing.Point(93, 327);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(75, 23);
             this.SettingsButton.TabIndex = 2;
@@ -61,7 +61,7 @@
             // ExitButton
             // 
             this.ExitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExitButton.Location = new System.Drawing.Point(405, 331);
+            this.ExitButton.Location = new System.Drawing.Point(397, 327);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(75, 23);
             this.ExitButton.TabIndex = 3;
@@ -77,14 +77,14 @@
             this.RepositoriesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.RepositoriesDataGridView.Location = new System.Drawing.Point(12, 12);
             this.RepositoriesDataGridView.Name = "RepositoriesDataGridView";
-            this.RepositoriesDataGridView.Size = new System.Drawing.Size(468, 313);
+            this.RepositoriesDataGridView.Size = new System.Drawing.Size(460, 309);
             this.RepositoriesDataGridView.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(492, 366);
+            this.ClientSize = new System.Drawing.Size(484, 362);
             this.Controls.Add(this.RepositoriesDataGridView);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.SettingsButton);
