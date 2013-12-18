@@ -8,12 +8,6 @@ namespace Parallel_Git_Repo_Sync
 {
     class DisplayDataGridView
     {
-        public enum SyncType
-        {
-            Push,
-            Pull,
-            Tags
-        }
         private DataGridView GitRepositoriesDataGridView;
 
         public DisplayDataGridView(DataGridView InputDataGridView)
@@ -26,8 +20,8 @@ namespace Parallel_Git_Repo_Sync
         {
             GitRepositoriesDataGridView.Columns.Clear();
             GitRepositoriesDataGridView.Columns.Add("Repository", "Repository");
-            GitRepositoriesDataGridView.Columns.Add("Push", "Push");
             GitRepositoriesDataGridView.Columns.Add("Pull", "Pull");
+            GitRepositoriesDataGridView.Columns.Add("Push", "Push");
             GitRepositoriesDataGridView.Columns.Add("Tags", "Tags");
             GitRepositoriesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             GitRepositoriesDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -44,6 +38,7 @@ namespace Parallel_Git_Repo_Sync
 
         public void ShowRepositories(string[] GitRepositories)
         {
+            GitRepositoriesDataGridView.Rows.Clear();
             foreach (string GitRepository in GitRepositories)
             {
                 GitRepositoriesDataGridView.RowCount += 1;
@@ -51,15 +46,34 @@ namespace Parallel_Git_Repo_Sync
             }
         }
 
-        public void UpdateStatus(string Repository, SyncType SyncTypeColumn, string Value)
+        public void UpdateStatus(string Repository, SyncActionType InputSyncActionType, SyncResultType InputSyncResultType)
         {
-            for (int i = 0; i < GitRepositoriesDataGridView.RowCount; i++)
+            GitRepositoriesDataGridView.Invoke(new EventHandler(delegate
             {
-                if (GitRepositoriesDataGridView.Rows[i].Cells[0].Value.ToString() == Repository)
+                int RowIndex, ColumnIndex;
+                string DisplayOutput;
+                for (RowIndex = 0; RowIndex < GitRepositoriesDataGridView.RowCount; RowIndex++)
                 {
-                    GitRepositoriesDataGridView.Rows[i].Cells[1].Value = Value;
+                    if (GitRepositoriesDataGridView.Rows[RowIndex].Cells[0].Value.ToString() == Repository)
+                    {
+                        switch (InputSyncActionType)
+                        {
+                            default:
+                            case SyncActionType.Pull: ColumnIndex = 1; break;
+                            case SyncActionType.Push: ColumnIndex = 2; break;
+                            case SyncActionType.Tags: ColumnIndex = 3; break;
+                        }
+                        switch (InputSyncResultType)
+                        {
+                            case SyncResultType.Pending: DisplayOutput = "-"; break;
+                            case SyncResultType.Success: DisplayOutput = "o"; break;
+                            case SyncResultType.Failed: DisplayOutput = "x"; break;
+                            default: DisplayOutput = ""; break;
+                        }
+                        GitRepositoriesDataGridView.Rows[RowIndex].Cells[ColumnIndex].Value = DisplayOutput;
+                    }
                 }
-            }
+            }));
         }
     }
 }

@@ -24,6 +24,9 @@ namespace Parallel_Git_Repo_Sync
             GitBinaryTextBox.Text = Reg.Read("Git Binary");
             GitRepositoriesTextBox.Text = Reg.Read("Git Repositories");
             MaximumThreadNumericUpDown.Value = Int32.Parse(Reg.Read("Maximum Thread"));
+
+            MaximumThreadLabel.Visible = false;
+            MaximumThreadNumericUpDown.Visible = false;
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)

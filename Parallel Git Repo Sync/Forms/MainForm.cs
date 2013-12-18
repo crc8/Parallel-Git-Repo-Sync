@@ -12,9 +12,11 @@ namespace Parallel_Git_Repo_Sync
 {
     public partial class MainForm : Form
     {
-        string GitBinary;
-        string[] GitRepositories;
+        private string GitBinary;
+        private string[] GitRepositories;
+        private int MaximumThread;
         private DisplayDataGridView GitRepositoriesDataGridView;
+        private BackgroundWorker[] SyncBackgroundWorker;
 
         public MainForm()
         {
@@ -31,23 +33,12 @@ namespace Parallel_Git_Repo_Sync
 
         private void SyncButton_Click(object sender, EventArgs e)
         {
-            foreach (string GitRepository in GitRepositories)
+            SyncBackgroundWorker = new BackgroundWorker[GitRepositories.Length];
+            for (int i = 0; i < GitRepositories.Length; i++)
             {
-                GitRepositoriesDataGridView.UpdateStatus(GitRepository, DisplayDataGridView.SyncType.Push, "...");
-                Process p = new Process();
-                p.EnableRaisingEvents = false;
-                p.StartInfo.FileName = GitBinary;
-                p.StartInfo.Arguments = " --git-dir=\"" + GitRepository + ".\\.git\" " + " --work-tree=\"" + GitRepository + "\" pull --all";
-                p.StartInfo.CreateNoWindow = false;
-                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                if (p.Start())
-                {
-                    GitRepositoriesDataGridView.UpdateStatus(GitRepository, DisplayDataGridView.SyncType.Push, "o");
-                }
-                else
-                {
-                    GitRepositoriesDataGridView.UpdateStatus(GitRepository, DisplayDataGridView.SyncType.Push, "x");
-                }
+                SyncBackgroundWorker[i] = new BackgroundWorker();
+                SyncBackgroundWorker[i].DoWork += new DoWorkEventHandler(SyncBackgroundWorker_DoWork);
+                SyncBackgroundWorker[i].RunWorkerAsync(i);
             }
         }
 
@@ -66,7 +57,64 @@ namespace Parallel_Git_Repo_Sync
         {
             GitBinary = Reg.Read("Git Binary");
             GitRepositories = Reg.Read("Git Repositories").Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            MaximumThread = Int32.Parse(Reg.Read("Maximum Thread"));
             GitRepositoriesDataGridView.ShowRepositories(GitRepositories);
+        }
+
+        private void SyncBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string GitRepository = GitRepositories[(int)e.Argument];
+            string Output;
+            int i;
+            SyncActionType TargetSyncActionType;
+            string TargetSyncAction;
+
+            Process SyncProcess = new Process();
+            SyncProcess.EnableRaisingEvents = false;
+            SyncProcess.StartInfo.FileName = GitBinary;
+            SyncProcess.StartInfo.CreateNoWindow = true;
+            SyncProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            SyncProcess.StartInfo.RedirectStandardOutput = true;
+            SyncProcess.StartInfo.RedirectStandardError = true;
+            SyncProcess.StartInfo.UseShellExecute = false;
+
+            for (i = 0; i < 3; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        TargetSyncActionType = SyncActionType.Pull;
+                        TargetSyncAction = "pull --all";
+                        break;
+                    case 1:
+                        TargetSyncActionType = SyncActionType.Push;
+                        TargetSyncAction = "push --all";
+                        break;
+                    case 2:
+                        TargetSyncActionType = SyncActionType.Tags;
+                        TargetSyncAction = "push --tags -f";
+                        break;
+                    default:
+                        return;
+                }
+                GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Pending);
+                SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository + ".\\.git\" " + " --work-tree=\"" + GitRepository + "\" " + TargetSyncAction;
+                SyncProcess.Start();
+                Output = "";
+                while (!SyncProcess.StandardOutput.EndOfStream)
+                {
+                    Output += SyncProcess.StandardOutput.ReadLine();
+                }
+                SyncProcess.WaitForExit();
+                if (SyncProcess.ExitCode == 0)
+                {
+                    GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Success);
+                }
+                else
+                {
+                    GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Failed);
+                }
+            }
         }
     }
 }
