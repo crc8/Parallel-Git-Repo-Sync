@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace Parallel_Git_Repo_Sync
 {
@@ -33,6 +34,7 @@ namespace Parallel_Git_Repo_Sync
 
         private void RepositoriesDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            LogTextBox.Clear();
             SyncBackgroundWorker = new BackgroundWorker[1];
             SyncBackgroundWorker[0] = new BackgroundWorker();
             SyncBackgroundWorker[0].DoWork += new DoWorkEventHandler(SyncBackgroundWorker_DoWork);
@@ -85,6 +87,7 @@ namespace Parallel_Git_Repo_Sync
             }
 
             GitRepositoriesDataGridView.ShowRepositories(GitRepositories);
+            LogTextBox.Clear();
         }
 
         private void SyncBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -103,6 +106,8 @@ namespace Parallel_Git_Repo_Sync
                 SyncProcess.StartInfo.CreateNoWindow = true;
                 SyncProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 SyncProcess.StartInfo.UseShellExecute = false;
+                SyncProcess.StartInfo.RedirectStandardOutput = true;
+                SyncProcess.StartInfo.RedirectStandardError = true;
                 switch (i)
                 {
                     case 0:
@@ -122,7 +127,9 @@ namespace Parallel_Git_Repo_Sync
                 }
                 GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Pending);
                 SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository.Trim() + ".\\.git\" " + " --work-tree=\"" + GitRepository.Trim() + "\" " + TargetSyncAction;
+                SyncProcess.OutputDataReceived += new DataReceivedEventHandler(SyncProcess_OutputDataReceived);
                 SyncProcess.Start();
+                SyncProcess.BeginOutputReadLine();
                 SyncProcess.WaitForExit(15 * 1000);
                 if (SyncProcess.HasExited && SyncProcess.ExitCode == 0)
                 {
@@ -134,6 +141,21 @@ namespace Parallel_Git_Repo_Sync
                 }
                 SyncProcess.Close();
             }
+        }
+
+        private void SyncProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            LogTextBox.Invoke(new EventHandler(delegate
+            {
+                Process SenderProcess = (Process)sender;
+                LogTextBox.AppendText(
+                    SenderProcess.StartInfo.FileName + 
+                    " " +
+                    SenderProcess.StartInfo.Arguments + 
+                    ":\r\n" + 
+                    e.Data + "\r\n\r\n"
+                    );
+            }));
         }
     }
 }
