@@ -128,8 +128,10 @@ namespace Parallel_Git_Repo_Sync
                 GitRepositoriesDataGridView.UpdateStatus(GitRepository, TargetSyncActionType, SyncResultType.Pending);
                 SyncProcess.StartInfo.Arguments = " --git-dir=\"" + GitRepository.Trim() + ".\\.git\" " + " --work-tree=\"" + GitRepository.Trim() + "\" " + TargetSyncAction;
                 SyncProcess.OutputDataReceived += new DataReceivedEventHandler(SyncProcess_OutputDataReceived);
+                SyncProcess.ErrorDataReceived += new DataReceivedEventHandler(SyncProcess_ErrorDataReceived);
                 SyncProcess.Start();
                 SyncProcess.BeginOutputReadLine();
+                SyncProcess.BeginErrorReadLine();
                 SyncProcess.WaitForExit(15 * 1000);
                 if (SyncProcess.HasExited && SyncProcess.ExitCode == 0)
                 {
@@ -148,13 +150,16 @@ namespace Parallel_Git_Repo_Sync
             LogTextBox.Invoke(new EventHandler(delegate
             {
                 Process SenderProcess = (Process)sender;
-                LogTextBox.AppendText(
-                    SenderProcess.StartInfo.FileName + 
-                    " " +
-                    SenderProcess.StartInfo.Arguments + 
-                    ":\r\n" + 
-                    e.Data + "\r\n\r\n"
-                    );
+                if (e.Data != null) LogTextBox.AppendText(e.Data + "\r\n");
+            }));
+        }
+
+        private void SyncProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            LogTextBox.Invoke(new EventHandler(delegate
+            {
+                Process SenderProcess = (Process)sender;
+                if(e.Data != null) LogTextBox.AppendText(e.Data + "\r\n");
             }));
         }
     }
