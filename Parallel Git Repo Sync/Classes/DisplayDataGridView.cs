@@ -23,7 +23,11 @@ namespace Parallel_Git_Repo_Sync
             GitRepositoriesDataGridView.Columns.Add("Pull", "Pull");
             GitRepositoriesDataGridView.Columns.Add("Push", "Push");
             GitRepositoriesDataGridView.Columns.Add("Tags", "Tags");
-            GitRepositoriesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            GitRepositoriesDataGridView.Columns[0].FillWeight = 55;
+            GitRepositoriesDataGridView.Columns[1].FillWeight = 15;
+            GitRepositoriesDataGridView.Columns[2].FillWeight = 15;
+            GitRepositoriesDataGridView.Columns[3].FillWeight = 15;
+            GitRepositoriesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             GitRepositoriesDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             GitRepositoriesDataGridView.AllowUserToResizeColumns = true;
             GitRepositoriesDataGridView.AllowUserToResizeRows = true;
